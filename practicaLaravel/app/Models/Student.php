@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Student extends Model
 {
     use HasFactory;
-
     protected $table = 'students';
     protected $fillable = [
         'name',
@@ -18,6 +17,5 @@ class Student extends Model
         'email',
         'gender',
     ];
-
     public $timestamps = false;
 }

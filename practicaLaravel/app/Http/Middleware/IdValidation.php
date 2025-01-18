@@ -17,8 +17,8 @@ class IdValidation
     {
         $id = $request->route('id');
 
-        if (!is_numeric($id) || (int)$id < 0 ) {
-            return response()->json(['error' => 'Id is not correct.', $id], 400);
+        if (!ctype_digit(strval($id)) || (int)$id <= 0) {
+            return response()->json(['success' => false, 'message' => 'Id format is not correct.', 'data' => ''], 400);
         }
 
         return $next($request);
