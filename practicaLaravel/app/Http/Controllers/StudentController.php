@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Models\Student;
+use Exception;
 
 class StudentController extends Controller
 {
@@ -15,7 +17,7 @@ class StudentController extends Controller
         try {
             $students = DB::table('students')->get();
             return response()->json(['success' => true, 'message' => 'Students loaded correctly', 'data' => $students], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => 'Error loading students: ' . $e->getMessage(), 'data' => ''], 500);
         }
     }
@@ -50,7 +52,7 @@ class StudentController extends Controller
             $student = DB::table('students')->where('id', $id)->first();
             DB::commit();
             return response()->json(['success' => true, 'message' => 'Student saved correctly', 'data' => $student], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             return response()->json(['success' => false, 'message' => 'Error saving student: ' . $e->getMessage(), 'data' => ''], 500);
         }
@@ -69,7 +71,7 @@ class StudentController extends Controller
             }
 
             return response()->json(['success' => true, 'message' => 'Student loaded correctly', 'data' => $student], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => 'Error loading student: ' . $e->getMessage(), 'data' => ''], 500);
         }
     }
@@ -107,7 +109,7 @@ class StudentController extends Controller
                 DB::commit();
                 return response()->json(['success' => true, 'message' => 'Nothing to update', 'data' => $student], 200);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             return response()->json(['success' => false, 'message' => 'Error updating student: ' . $e->getMessage(), 'data' => ''], 500);
         }
@@ -129,10 +131,24 @@ class StudentController extends Controller
             DB::table('students')->where('id', $id)->delete();
             
             DB::commit();
-            return response()->json(['message' => 'Student deleted correctly', 'data' => $student], 200);
-        } catch (\Exception $e) {
+            return response()->json(['success' => true, 'message' => 'Student deleted correctly', 'data' => $student], 200);
+        } catch (Exception $e) {
             DB::rollBack();
             return response()->json(['success' => false, 'message' => 'Error deleting student: ' . $e->getMessage(), 'data' => ''], 500);
+        }
+    }
+
+    public function getSubjects($id)
+    {
+        try {
+            $student = Student::find($id);
+            if (!$student) {
+                return response()->json(['success' => false, 'message' => 'Student not found', 'data' => ''], 404);
+            }
+
+            return response()->json(['success' => true, 'message' => 'Subjects loaded correctly', 'data' => $student->subjects], 200);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error loading subjects: ' . $e->getMessage(), 'data' => ''], 500);
         }
     }
 }
