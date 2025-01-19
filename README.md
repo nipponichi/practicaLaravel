@@ -21,3 +21,5 @@
     una nueva migración pendiente en la carpeta migrations
 10. *php artisan db:seed*
     - Comando que ejecuta el metodo run  de DatabaseSeeder, donde debemos instanciar los seeders creados y tiene como misión llenar de valores las tablas de la base de datos.
+10. *php artisan optimize:clear*
+    - Limpia todas las cachés del proyecto, necesario cuando modificamos las rutas de laravel
