@@ -130,7 +130,7 @@ class StudentController extends Controller
             DB::table('students')->where('id', $id)->delete();
             
             DB::commit();
-            return response()->json(['success' => false, 'message' => 'Student deleted correctly', 'data' => $student], 200);
+            return response()->json(['success' => true, 'message' => 'Student deleted correctly', 'data' => $student], 200);
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json(['success' => false, 'message' => 'Error deleting student: ' . $e->getMessage(), 'data' => ''], 500);
