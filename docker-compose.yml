@@ -1,0 +1,54 @@
+services:
+  # MySQL
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: school_db
+      MYSQL_USER: javier
+      MYSQL_PASSWORD: 1234
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # API Laravel
+  backend:
+    build: ./practicaLaravel
+    container_name: laravel-app
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8002:9000"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=base64:2RqtQtgD3YuqPLXeIfsHrWoqeQ2kPA3YwyhW7FTWtmA=
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=school_db
+      - DB_USERNAME=javier
+      - DB_PASSWORD=1234
+    volumes:
+      - ./practicaLaravel:/var/www
+    command: >
+      sh -c "php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=9000"
+
+        # PHP Web Server for index.php
+  php-web:
+    build: ./frontend
+    container_name: php-web
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend/index.php:/var/www/html/index.php
+
+volumes:
+  mysql_data:
