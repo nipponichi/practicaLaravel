@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\PassportLoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
@@ -9,6 +10,10 @@ use App\Http\Controllers\LoginController;
 
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/signup', [LoginController::class, 'signup']);
+
+
+Route::post('/login2', [PassportLoginController::class, 'login']);
+
 
 Route::middleware(['auth.validation'])->group(function(){
     
