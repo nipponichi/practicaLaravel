@@ -12,7 +12,7 @@ class LoginController extends Controller
         try {
 
             if (Auth::guard('api')->check()) {
-                return response()->json(['message' => 'Ya estás autenticado'], 200);
+                return response()->json(['succes'=> true, 'message' => 'Ya estás autenticado'], 200);
             }
         
             $data = $request->validate([
@@ -23,13 +23,13 @@ class LoginController extends Controller
             if (Auth::attempt($data)) {
                 $user = Auth::user();
                 if (!$user) {
-                    return 'no existe usuario';
+                    return response()->json(['success' => false, 'message' => 'User not found'], 404);
                 }
                 $token = $user->createToken('token');
-                return response()->json(['succes'=> true, 'message' => 'Logeado', 'token' => $token], 200);
+                return response()->json(['succes'=> true, 'message' => 'Logged in successfully', 'token' => $token], 200);
             }
         
-            return response()->json(['success' => false, 'message' => 'unauthorized'], 401);
+            return response()->json(['success' => false, 'message' => 'Unauthorized login'], 401);
         } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => 'Error while login' . $e->getMessage(), 'data' => ''], 500);
         }
@@ -46,10 +46,7 @@ class LoginController extends Controller
             
             $user->tokens()->delete();
     
-            return response()->json([
-                'success' => true,
-                'message' => 'Logged out successfully',
-            ]);
+            return response()->json(['success' => true,'message' =>'Logged out successfully'], 200);
         } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => 'Error while logout' . $e->getMessage(), 'data' => ''], 500);
         }
