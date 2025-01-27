@@ -12,7 +12,7 @@ class LoginController extends Controller
         try {
 
             if (Auth::guard('api')->check()) {
-                return response()->json(['succes'=> true, 'message' => 'Ya estás autenticado'], 200);
+                return response()->json(['succes'=> true, 'message' => 'Already authentified'], 200);
             }
         
             $data = $request->validate([
