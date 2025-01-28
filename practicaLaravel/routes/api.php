@@ -14,8 +14,10 @@ Route::post('/signup', [LoginController::class, 'signup']);
 
 Route::post('/login2', [PassportLoginController::class, 'login']);
 Route::post('/signup2', [PassportLoginController::class, 'signup']);
-Route::post('/userData2', [PassportLoginController::class, 'userProfile']);
-Route::post('/logout2', [PassportLoginController::class, 'logout']);
+
+Route::middleware(['auth.validation2'])->group(function () {
+    Route::post('/userData2', [PassportLoginController::class, 'userProfile']);
+});
 
 Route::middleware(['auth.validation'])->group(function(){
     
@@ -41,5 +43,8 @@ Route::middleware(['auth.validation'])->group(function(){
 
     Route::get('/userdata', [LoginController::class, 'userProfile']);
     Route::post('/logout', [LoginController::class, 'logout']);
+
+    Route::post('/logout2', [PassportLoginController::class, 'logout']);
+
 });  
  
